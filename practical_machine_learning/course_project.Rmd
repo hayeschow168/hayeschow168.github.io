@@ -1,0 +1,89 @@
+---
+title: "Practical Machine Learning"
+author: "Hayes Chow"
+date: "2023-05-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(caret)
+library(randomForest)
+
+quiz_classe = factor(c("B","A","B","A",
+                "A","E","D","B",
+                "A","A","B","C",
+                "B","A","E","E",
+                "A","B","B","B"
+                ))
+```
+
+## Overview / Executive Summary
+
+This project explores machine learning.
+
+### Load data
+Load data and remove any blank or columns with NA values.
+```{r load_data}
+setwd("C:/Users/hchow/Downloads/Practical Machine Learning/course project")
+data_train <- read.csv("pml-training.csv", na.strings = c("", "NA"))
+data_test <- read.csv("pml-testing.csv", na.strings = c("", "NA"))
+```
+
+### Clean data
+Clean the data by removing columns where over 90% of values are blank.
+```{r clean_data}
+x <- (colMeans(is.na(data_train))) * 100
+blanks <- names(which(x > 90))
+data_train <- data_train[ , !(names(data_train) %in% blanks)]
+```
+
+### Primary Component Analysis
+Use primary component analysis to reduce number of variables. Determine that 25 varibles are required to cover 95% of variance.
+```{r pca_data}
+pca_df <- prcomp(data_train[,8:59], scale = TRUE)
+var_explained <- pca_df$sdev ^ 2 / sum(pca_df$sdev ^ 2)
+
+# scree plot
+barplot(var_explained[1:25], main="Scree Plot: Percentage of variation explained by each principal component", xlab="PCA", ylab = "variance explained")
+sum(var_explained[1:25]) # 25 Variables to get over 95% variance explained
+pca_df_cols <- rownames(pca_df$rotation)[1:25] #list of columns
+
+# keep only pca columns and rebind to predictor column
+df2 <- cbind(data_train[, names(data_train) %in% pca_df_cols], factor(data_train[,60]))
+# rename back the predictor column
+colnames(df2) <- c(pca_df_cols, "classe")
+
+```
+
+### Machine Learning Algorithm - Random Forest
+Why use random forest algorithm? Predictor variable contains 5 levels ("A", "B", "C", "D", "E"), representing 5 different ways  barbell lifts are performed, so they are non-linear. Can't use linear regression, or general linear model because it supports up to 2 classes or levels. Multi-class variable is well suited for random forests. Data is noisy (participants were asked to perform lifts both correctly and incorrectly) and variable, making it well-suited for random forest. 
+
+Use the random forest on the training dataset.
+Random forest algorithm includes cross-validation. Then use the trained model to predict values with test dataset.Set seed for reproducibility.
+```{r random_forest_train}
+set.seed(32343)
+rf <- randomForest(classe ~ ., data = df2)
+rf
+```
+Type of random forest is classification. 500 trees.Out-of-box estimate of error rate is 1.03%
+
+### Predicted values
+```{r random_forest_predict}
+p1 <- predict(rf, data_test)
+p1
+```
+
+## Conclusion
+Confusion matrix compares predicted values with actual values for "Classe" variable.
+```{r random_forest_quiz}
+confusionMatrix(p1, quiz_classe)
+```
+
+## References
+https://medium.com/@aravanshad/gradient-boosting-versus-random-forest-cfa3fa8f0d80
+https://www.guru99.com/r-random-forest-tutorial.html
+https://www.listendata.com/2014/11/random-forest-with-r.html
+https://www.projectpro.io/recipes/perform-random-forest-r#mcetoc_1g5vh1b90e
+https://www.statology.org/scree-plot-r/
