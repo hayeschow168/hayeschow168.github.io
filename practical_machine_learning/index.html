@@ -359,7 +359,15 @@ display: none;
 
 <div id="overview-executive-summary" class="section level2">
 <h2>Overview / Executive Summary</h2>
-<p>This project explores machine learning.</p>
+<p>This project explores machine learning. Background info can be
+located here. <a href="https://www.coursera.org/learn/practical-machine-learning/supplement/PvInj/course-project-instructions-read-first" class="uri">https://www.coursera.org/learn/practical-machine-learning/supplement/PvInj/course-project-instructions-read-first</a></p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>The training data for this project are available here:</p>
+<p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv" class="uri">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv</a></p>
+<p>The test data are available here:</p>
+<p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv" class="uri">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</a></p>
+</div>
 <div id="load-data" class="section level3">
 <h3>Load data</h3>
 <p>Load data and remove any blank or columns with NA values.</p>
@@ -403,9 +411,9 @@ general linear model because it supports up to 2 classes or levels.
 Multi-class variable is well suited for random forests. Data is noisy
 (participants were asked to perform lifts both correctly and
 incorrectly) and variable, making it well-suited for random forest.</p>
-<p>Use the random forest on the training dataset. Random forest
-algorithm includes cross-validation. Then use the trained model to
-predict values with test dataset.Set seed for reproducibility.</p>
+<p>Use the random forest on the training dataset. Then use the trained
+model to predict values with test dataset. Set seed for
+reproducibility.</p>
 <pre class="r"><code>set.seed(32343)
 rf &lt;- randomForest(classe ~ ., data = df2)
 rf</code></pre>
@@ -424,8 +432,16 @@ rf</code></pre>
 ## C    6   54 3344   17    1 0.022793688
 ## D    4    1   36 3172    3 0.013681592
 ## E    2    5    1    3 3596 0.003049626</code></pre>
-<p>Type of random forest is classification. 500 trees.Out-of-box
-estimate of error rate is 1.03%</p>
+<p>Type of random forest is classification. 500 trees.</p>
+</div>
+<div id="cross-validation" class="section level3">
+<h3>Cross Validation</h3>
+<p>The Random forest algorithm includes cross-validation, so it is not
+necessary to use cross validation separately.</p>
+</div>
+<div id="out-of-sample-error" class="section level3">
+<h3>Out of Sample Error</h3>
+<p>The Out of Sample (Out-of-box) estimate of error rate is 1.03%</p>
 </div>
 <div id="predicted-values" class="section level3">
 <h3>Predicted values</h3>
@@ -479,7 +495,7 @@ p1</code></pre>
 <p><a href="https://medium.com/@aravanshad/gradient-boosting-versus-random-forest-cfa3fa8f0d80" class="uri">https://medium.com/@aravanshad/gradient-boosting-versus-random-forest-cfa3fa8f0d80</a>
 <a href="https://www.guru99.com/r-random-forest-tutorial.html" class="uri">https://www.guru99.com/r-random-forest-tutorial.html</a> <a href="https://www.listendata.com/2014/11/random-forest-with-r.html" class="uri">https://www.listendata.com/2014/11/random-forest-with-r.html</a>
 <a href="https://www.projectpro.io/recipes/perform-random-forest-r#mcetoc_1g5vh1b90e" class="uri">https://www.projectpro.io/recipes/perform-random-forest-r#mcetoc_1g5vh1b90e</a>
-<a href="https://www.statology.org/scree-plot-r/" class="uri">https://www.statology.org/scree-plot-r/</a></p>
+<a href="https://www.statology.org/scree-plot-r/" class="uri">https://www.statology.org/scree-plot-r/</a> <a href="https://www.digitalocean.com/community/tutorials/confusion-matrix-in-r" class="uri">https://www.digitalocean.com/community/tutorials/confusion-matrix-in-r</a></p>
 </div>
 
 

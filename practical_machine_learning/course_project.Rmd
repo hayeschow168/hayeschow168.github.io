@@ -21,7 +21,17 @@ quiz_classe = factor(c("B","A","B","A",
 
 ## Overview / Executive Summary
 
-This project explores machine learning.
+This project explores machine learning. Background info can be located here.
+https://www.coursera.org/learn/practical-machine-learning/supplement/PvInj/course-project-instructions-read-first
+
+### Data 
+The training data for this project are available here: 
+
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
+
+The test data are available here:
+
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
 ### Load data
 Load data and remove any blank or columns with NA values.
@@ -60,14 +70,19 @@ colnames(df2) <- c(pca_df_cols, "classe")
 ### Machine Learning Algorithm - Random Forest
 Why use random forest algorithm? Predictor variable contains 5 levels ("A", "B", "C", "D", "E"), representing 5 different ways  barbell lifts are performed, so they are non-linear. Can't use linear regression, or general linear model because it supports up to 2 classes or levels. Multi-class variable is well suited for random forests. Data is noisy (participants were asked to perform lifts both correctly and incorrectly) and variable, making it well-suited for random forest. 
 
-Use the random forest on the training dataset.
-Random forest algorithm includes cross-validation. Then use the trained model to predict values with test dataset.Set seed for reproducibility.
+Use the random forest on the training dataset. Then use the trained model to predict values with test dataset. Set seed for reproducibility.
 ```{r random_forest_train}
 set.seed(32343)
 rf <- randomForest(classe ~ ., data = df2)
 rf
 ```
-Type of random forest is classification. 500 trees.Out-of-box estimate of error rate is 1.03%
+Type of random forest is classification. 500 trees. 
+
+### Cross Validation
+The Random forest algorithm includes cross-validation, so it is not necessary to use cross validation separately.
+
+### Out of Sample Error
+The Out of Sample (Out-of-box) estimate of error rate is 1.03%
 
 ### Predicted values
 ```{r random_forest_predict}
@@ -87,3 +102,4 @@ https://www.guru99.com/r-random-forest-tutorial.html
 https://www.listendata.com/2014/11/random-forest-with-r.html
 https://www.projectpro.io/recipes/perform-random-forest-r#mcetoc_1g5vh1b90e
 https://www.statology.org/scree-plot-r/
+https://www.digitalocean.com/community/tutorials/confusion-matrix-in-r
